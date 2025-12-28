@@ -1,24 +1,16 @@
 import { io } from "socket.io-client";
 import React, { createContext } from "react";
 
-const WS_Server = "http://localhost:5000";
-
-const SocketContext = createContext<any | null>(null);
-
-const socket = io(WS_Server, {
-  transports: ["websocket"], 
+const socket = io("http://localhost:5000", {
+  transports: ["websocket", "polling"], // optional
 });
 
-interface Props {
-  children: React.ReactNode;
-}
+export const SocketContext = createContext<any>(null);
 
-export const SocketProvider: React.FC<Props> = ({ children }) => {
+export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
   return (
     <SocketContext.Provider value={{ socket }}>
       {children}
     </SocketContext.Provider>
   );
 };
-
-export default SocketContext;
