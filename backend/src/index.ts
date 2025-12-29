@@ -3,6 +3,7 @@ import http from "http";
 import { Server } from "socket.io";
 import cors from "cors";
 import dotenv from "dotenv";
+import roomHandler from "./handlers/RoomHandler.js";
 
 const app = express();
 
@@ -22,6 +23,7 @@ const io = new Server(server, {
 
 io.on("connection", (socket)=>{
     console.log(`User connected: ${socket.id}`);
+    roomHandler(socket);
 
     socket.on("disconnect", ()=>{
         console.log(`User disconnected: ${socket.id}`);
