@@ -1,14 +1,16 @@
-import React from 'react'
-import { useParams } from 'react-router-dom';
+import React, { useContext, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import { SocketContext } from "../Context/SocketContext";
 
 const Room = () => {
+  const { id } = useParams();
+  const { socket } = useContext(SocketContext);
 
-    const {id}= useParams();
+  useEffect(() => {
+    socket.emit("joined-room", {roomId: id});
+  }, []);
 
-    
-  return (
-    <div>Room: {id}</div>
-  )
-}
+  return <div>Room: {id}</div>;
+};
 
 export default Room;

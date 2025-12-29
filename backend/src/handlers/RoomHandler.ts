@@ -15,7 +15,7 @@ const roomHandler = (socket: Socket) => {
     }
 
     socket.on("create-room", createRoom);
-    socket.on("join-room", joinRoom);
+    socket.on("joined-room", joinedRoom);
 
 }
 
