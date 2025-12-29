@@ -10,7 +10,7 @@ const roomHandler = (socket: Socket) => {
         console.log("room created with id:", socket.id)
     }
 
-    const joinRoom = () => {
+    const joinedRoom = () => {
         console.log("New Room Joined")
     }
 
