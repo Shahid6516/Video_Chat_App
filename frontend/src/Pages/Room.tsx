@@ -4,11 +4,14 @@ import { SocketContext } from "../Context/SocketContext";
 
 const Room = () => {
   const { id } = useParams();
-  const { socket } = useContext(SocketContext);
+  const { socket, user } = useContext(SocketContext);
 
   useEffect(() => {
-    socket.emit("joined-room", {roomId: id});
-  }, []);
+    if (user) {
+      console.log("New user with id:", user._id)
+      socket.emit("joined-room", { roomId: id, peerId: user?._id });
+    }
+  }, [id , user]);
 
   return <div>Room: {id}</div>;
 };
