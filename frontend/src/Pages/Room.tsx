@@ -11,7 +11,7 @@ const Room = () => {
       console.log("New user with id:", user._id)
       socket.emit("joined-room", { roomId: id, peerId: user?._id });
     }
-  }, [id , user]);
+  }, [id , user, socket]);
 
   return <div>Room: {id}</div>;
 };
