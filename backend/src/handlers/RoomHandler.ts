@@ -8,22 +8,32 @@ const roomHandler = (socket: Socket) => {
     const createRoom = () => {
         const roomId = UUIDv4();
         socket.join(roomId);
+
+        rooms[roomId] = [];
+
+
         socket.emit("room-created", { roomId });
         console.log("room created with id:", socket.id)
     }
 
     const joinedRoom = ({ roomId, peerId }: { roomId: string; peerId: string }) => {
 
-        if 
+        if (rooms[roomId]) {
+
+            console.log("New Room Joined:", roomId, "by peerId:", peerId);
+            rooms[roomId].push(peerId);
+            socket.join(roomId);
+
+            socket.emit("get-users", {
+                roomId,
+                participants: rooms[roomId]
+            })
+        }
+
+        socket.on("create-room", createRoom);
+        socket.on("joined-room", joinedRoom);
 
 
-        console.log("New Room Joined:", roomId, "by peerId:", peerId);
     }
 
-    socket.on("create-room", createRoom);
-    socket.on("joined-room", joinedRoom);
-
-
-}
-
-export default roomHandler;
+    export default roomHandler;

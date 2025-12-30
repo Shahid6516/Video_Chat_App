@@ -24,6 +24,7 @@ export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
     };
 
     socket.on("room-created", enterRoom);
+    socket.on("get-users",fetchPartcipantsList);
 
     return () => {
       socket.off("room-created", enterRoom);
