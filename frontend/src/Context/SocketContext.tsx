@@ -14,7 +14,9 @@ export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
   const navigate = useNavigate();
 
   const [user, setUser] = useState<Peer>();
- const fetchParticipantsList = ({
+  const [stream, setStream] = useState<MediaStream>();
+
+  const fetchParticipantsList = ({
     roomId,
     participants,
   }: {
@@ -25,10 +27,16 @@ export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
     console.log(roomId, participants);
   };
 
+  const fetchUserFeed = async () => {
+   const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+   setStream(stream);
+  };
+
   useEffect(() => {
     const userID = UUIDv4();
     const newPeer = new Peer(userID);
     setUser(newPeer);
+    fetchUserFeed();
     const enterRoom = ({ roomId }: { roomId: string }) => {
       navigate(`/room/${roomId}`);
     };
@@ -38,12 +46,11 @@ export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
     return () => {
       socket.off("room-created", enterRoom);
       socket.on("get-users", fetchParticipantsList);
-
     };
   }, [navigate]);
 
   return (
-    <SocketContext.Provider value={{ socket, user }}>
+    <SocketContext.Provider value={{ socket, user, stream }}>
       {children}
     </SocketContext.Provider>
   );

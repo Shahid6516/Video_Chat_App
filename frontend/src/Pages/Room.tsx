@@ -1,10 +1,11 @@
 import React, { useContext, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { SocketContext } from "../Context/SocketContext";
+import UserFeedPlayer from "../Component/UserFeedPlayer";
 
 const Room = () => {
   const { id } = useParams();
-  const { socket, user } = useContext(SocketContext);
+  const { socket, user, stream } = useContext(SocketContext);
 
   useEffect(() => {
     if (user) {
@@ -13,7 +14,12 @@ const Room = () => {
     }
   }, [id, user, socket]);
 
-  return <div>Room: {id}</div>;
+  return (
+    <div>
+      Room: {id}
+      <UserFeedPlayer stream={stream} />
+    </div>
+  );
 };
 
 export default Room;
