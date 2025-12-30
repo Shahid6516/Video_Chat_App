@@ -1,8 +1,9 @@
 import { io, Socket } from "socket.io-client";
-import React, { createContext, useEffect, useState } from "react";
+import React, { createContext, useEffect, useReducer, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Peer from "peerjs";
 import { v4 as UUIDv4 } from "uuid";
+import { peerReducer } from "../Reducers/peerReducers";
 
 const socket: Socket = io("http://localhost:5000", {
   transports: ["websocket", "polling"],
@@ -16,6 +17,8 @@ export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<Peer>();
   const [stream, setStream] = useState<MediaStream>();
 
+  const [peers, dispatch] = useReducer(peerReducer, {});
+
   const fetchParticipantsList = ({
     roomId,
     participants,
@@ -28,8 +31,11 @@ export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   const fetchUserFeed = async () => {
-   const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-   setStream(stream);
+    const stream = await navigator.mediaDevices.getUserMedia({
+      video: true,
+      audio: true,
+    });
+    setStream(stream);
   };
 
   useEffect(() => {
@@ -43,11 +49,21 @@ export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
 
     socket.on("room-created", enterRoom);
 
+    // socket.on("get-users", fetchParticipantsList);
+
     return () => {
       socket.off("room-created", enterRoom);
       socket.on("get-users", fetchParticipantsList);
     };
   }, [navigate]);
+
+  useEffect(() => {
+    if (!user || !stream) return;
+
+    socket.on("user-joined", ({ peerId }) => {
+      const call = user.call(peerId, stream);
+    });
+  }, [user, stream]);
 
   return (
     <SocketContext.Provider value={{ socket, user, stream }}>
