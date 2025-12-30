@@ -3,7 +3,7 @@ import { v4 as UUIDv4 } from "uuid";
 
 const roomHandler = (socket: Socket) => {
 
-    const rooms : Record<string, string[]> = {};
+    const rooms: Record<string, string[]> = {};
 
     const createRoom = () => {
         const roomId = UUIDv4();
@@ -13,6 +13,10 @@ const roomHandler = (socket: Socket) => {
     }
 
     const joinedRoom = ({ roomId, peerId }: { roomId: string; peerId: string }) => {
+
+        if 
+
+
         console.log("New Room Joined:", roomId, "by peerId:", peerId);
     }
 
