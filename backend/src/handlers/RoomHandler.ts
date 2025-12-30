@@ -1,9 +1,10 @@
 import { Socket } from "socket.io";
 import { v4 as UUIDv4 } from "uuid";
+import IRoomParams from "../interfaces/iRoomParams.js";
 
+const rooms: Record<string, string[]> = {};
 const roomHandler = (socket: Socket) => {
 
-    const rooms: Record<string, string[]> = {};
 
     const createRoom = () => {
         const roomId = UUIDv4();
@@ -33,7 +34,7 @@ const roomHandler = (socket: Socket) => {
         socket.on("create-room", createRoom);
         socket.on("joined-room", joinedRoom);
 
-
+    }
     }
 
     export default roomHandler;

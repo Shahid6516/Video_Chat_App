@@ -14,6 +14,16 @@ export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
   const navigate = useNavigate();
 
   const [user, setUser] = useState<Peer>();
+ const fetchParticipantsList = ({
+    roomId,
+    participants,
+  }: {
+    roomId: string;
+    participants: string[];
+  }) => {
+    console.log("Fetched Room Participants");
+    console.log(roomId, participants);
+  };
 
   useEffect(() => {
     const userID = UUIDv4();
@@ -24,10 +34,11 @@ export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
     };
 
     socket.on("room-created", enterRoom);
-    socket.on("get-users",fetchPartcipantsList);
 
     return () => {
       socket.off("room-created", enterRoom);
+      socket.on("get-users", fetchParticipantsList);
+
     };
   }, [navigate]);
 
