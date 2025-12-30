@@ -1,6 +1,5 @@
 import { useEffect, useRef } from "react";
 
-// Define the Interface for your props
 interface UserFeedPlayerProps {
   stream: MediaStream | null;
 }
@@ -22,7 +21,7 @@ const UserFeedPlayer = ({ stream }: UserFeedPlayerProps) => {
         style={{ width: "300px", height: "", backgroundColor: "black" }}
         muted
         autoPlay
-        playsInline // Necessary for mobile support
+        playsInline 
       />
     </div>
   );
