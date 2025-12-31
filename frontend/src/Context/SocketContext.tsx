@@ -62,7 +62,20 @@ export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
 
     socket.on("user-joined", ({ peerId }) => {
       const call = user.call(peerId, stream);
+      console.log("calling the new PEER:", peerId)
+
+      call.on("stream", ()=>{
+        console.log("Receiving stream from PEER:", peerId);
+      })
+      
     });
+
+    user.on("call", (call) => {
+      call.answer(stream);
+      console.log("Answering the call from PEER:", call.peer);
+    });
+
+    socket.emit("ready");
   }, [user, stream]);
 
   return (
