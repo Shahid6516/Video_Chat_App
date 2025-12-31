@@ -14,27 +14,25 @@ app.use(cors());
 const server = http.createServer(app);
 
 const io = new Server(server, {
-    cors:{
+    cors: {
         origin: "http://localhost:5173",
         methods: ["GET", "POST"]
     }
-}
-);
+});
 
-io.on("connection", (socket)=>{
+io.on("connection", (socket) => {
     console.log(`User connected: ${socket.id}`);
-    roomHandler(socket);
+    
+    
+    roomHandler(socket, io);
 
-    socket.on("disconnect", ()=>{
+    socket.on("disconnect", () => {
         console.log(`User disconnected: ${socket.id}`);
-    })
-})
-
+    });
+});
 
 const PORT = process.env.PORT || 5000;
 
 server.listen(PORT, () => {
-  console.log(`Server is runing on port : ${PORT}`);
+    console.log(`Server is running on port : ${PORT}`);
 });
-
-
